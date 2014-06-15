@@ -132,7 +132,7 @@ class hc128:
 
     @staticmethod
     def encrypt(message, key, _base64=True):
-        salt = Byte.hex_to_byte(config.salt)
+        salt = Byte.hex_to_byte("633f7b241f16d678c20f84e92d9197f1")
         generated_key = PBKD.generate_key(''.join([chr(c) for c in salt]), key, 2)
         # set key
         key_iv = generated_key[0:16]
@@ -147,8 +147,9 @@ class hc128:
         for _in in _input:
             _output.append(hc.crypt(_in))
 
+        _output = ''.join([chr(c) for c in _output])
         if _base64:
-            _output = base64.b64encode(''.join([chr(c) for c in _output]))
+            _output = base64.b64encode(_output)
 
         return _output
 
@@ -165,11 +166,11 @@ class hc128:
         hc.set_key([ord(c) for c in key_iv])
 
         if _base64:
-            message = base64.b64encode(''.join([chr(c) for c in message]))
+            message = base64.b64decode(message)
         _input = [ord(c) for c in message]
         _output = []
         for _in in _input:
             _output.append(hc.crypt(_in))
 
+        _output = ''.join([chr(c) for c in _output])
         return _output
-
